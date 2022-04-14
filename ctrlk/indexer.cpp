@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 
 #include <vector>
 #include <queue>
@@ -247,7 +248,7 @@ void IncludedFileVisitor(CXFile includedFile, CXSourceLocation* inclusionStack, 
 
     time_t actualModTime = GetFileModificationTime(fileName.c_str());
 
-    IncludedFileContext* ctx = reinterpret_cast<IncludedFileContext*>(data); 
+    IncludedFileContext* ctx = reinterpret_cast<IncludedFileContext*>(data);
     if (fileName == ctx->originFile)
     {
         return;
@@ -376,7 +377,7 @@ CXChildVisitResult SymbolVisitor(CXCursor cursor, CXCursor parent, CXClientData 
                 std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
 
                 std::stringstream suffixStream;
-                suffixStream << DbEntryPrefix(i, cursor) << "%%%" << suffix << "%%%" << symbol << "%%%" << fileName 
+                suffixStream << DbEntryPrefix(i, cursor) << "%%%" << suffix << "%%%" << symbol << "%%%" << fileName
                                 << "%%%" << lineNumber << "%%%" << columnNumber << "%%%" << displayName;
                 batch.Put(suffixStream.str(), std::string(kindBuf));
             }
@@ -388,9 +389,11 @@ CXChildVisitResult SymbolVisitor(CXCursor cursor, CXCursor parent, CXClientData 
     return CXChildVisit_Recurse;
 }
 
-void DeleteFromIndex(std::string prefix, leveldb::WriteBatch* batch, 
-        const std::function<void (std::string, leveldb::WriteBatch*)> callback)
-{
+void DeleteFromIndex(
+    std::string prefix,
+    leveldb::WriteBatch* batch,
+    const std::function<void (std::string, leveldb::WriteBatch*)> callback
+) {
     std::string rangeStart = prefix + std::string("%%%");
     std::string rangeEnd = prefix + std::string("%%^");
     leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
@@ -490,7 +493,7 @@ void worker()
 
             struct timeval start, end;
 
-//            long seconds, useconds;    
+//            long seconds, useconds;
 
             gettimeofday(&start, NULL);
 
@@ -575,7 +578,7 @@ PyObject* add_file_to_parse(PyObject *self, PyObject *args)
     std::vector<std::string> argv;
     for (int i = 0; i < PyList_Size(argList); i++)
     {
-        argv.push_back(PyString_AsString(PyList_GetItem(argList, i)));
+        argv.push_back(PyBytes_AS_STRING(PyList_GetItem(argList, i)));
     }
 
     CompileCommand cmd(fileName, argv, modTime);
@@ -596,7 +599,7 @@ PyObject* start(PyObject *self, PyObject *args)
 {
     PyLevelDB* pyLevelDbConn = nullptr;
     int nworkers = 0;
-    
+
     if (!PyArg_ParseTuple(args, "Oi", &pyLevelDbConn, &nworkers))
         return NULL;
 

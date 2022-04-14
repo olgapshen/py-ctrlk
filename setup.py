@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Copyright (c) Arni Mar Jonsson.
-# 
+#
 # Updates to setup.py/PyPi - Nikita Shamgunov (nikita@memsql.com)
 #
 #
@@ -18,7 +18,7 @@ if cxx_var and 'ccache' in cxx_var:
 ld_lib_path = os.getenv("LD_LIBRARY_PATH")
 if ld_lib_path:
     os.environ['LD_LIBRARY_PATH'] = ':'.join([d for d in ld_lib_path.split(':') if 'memsql' not in d])
-    print os.getenv("LD_LIBRARY_PATH")
+    print(os.getenv("LD_LIBRARY_PATH"))
 
 import ez_setup
 ez_setup.use_setuptools()
@@ -75,7 +75,7 @@ if system == 'Darwin':
 elif system == 'Linux':
   extra_compile_args = common_flags + [
       '-pthread',
-      '-Wall', 
+      '-Wall',
       '-DOS_LINUX',
       '-DLEVELDB_PLATFORM_POSIX',
       '-std=c++0x'
@@ -127,44 +127,44 @@ setup(
                 './snappy/snappy-c.cc',
 
                 #leveldb
-                'leveldb/db/builder.cc', 
-                'leveldb/db/c.cc', 
-                'leveldb/db/db_impl.cc', 
-                'leveldb/db/db_iter.cc', 
-                'leveldb/db/dbformat.cc', 
-                'leveldb/db/filename.cc', 
-                'leveldb/db/log_reader.cc', 
-                'leveldb/db/log_writer.cc', 
-                'leveldb/db/memtable.cc', 
-                'leveldb/db/repair.cc', 
-                'leveldb/db/table_cache.cc', 
-                'leveldb/db/version_edit.cc', 
-                'leveldb/db/version_set.cc', 
-                'leveldb/db/write_batch.cc', 
-                'leveldb/table/block.cc', 
-                'leveldb/table/block_builder.cc', 
-                'leveldb/table/filter_block.cc', 
-                'leveldb/table/format.cc', 
-                'leveldb/table/iterator.cc', 
-                'leveldb/table/merger.cc', 
-                'leveldb/table/table.cc', 
-                'leveldb/table/table_builder.cc', 
-                'leveldb/table/two_level_iterator.cc', 
-                'leveldb/util/arena.cc', 
-                'leveldb/util/bloom.cc', 
-                'leveldb/util/cache.cc', 
-                'leveldb/util/coding.cc', 
-                'leveldb/util/comparator.cc', 
-                'leveldb/util/crc32c.cc', 
-                'leveldb/util/env.cc', 
-                'leveldb/util/env_posix.cc', 
-                'leveldb/util/filter_policy.cc', 
-                'leveldb/util/hash.cc', 
-                'leveldb/util/histogram.cc', 
-                'leveldb/util/logging.cc', 
-                'leveldb/util/options.cc', 
-                'leveldb/util/status.cc', 
-                'leveldb/port/port_posix.cc', 
+                'leveldb/db/builder.cc',
+                'leveldb/db/c.cc',
+                'leveldb/db/db_impl.cc',
+                'leveldb/db/db_iter.cc',
+                'leveldb/db/dbformat.cc',
+                'leveldb/db/filename.cc',
+                'leveldb/db/log_reader.cc',
+                'leveldb/db/log_writer.cc',
+                'leveldb/db/memtable.cc',
+                'leveldb/db/repair.cc',
+                'leveldb/db/table_cache.cc',
+                'leveldb/db/version_edit.cc',
+                'leveldb/db/version_set.cc',
+                'leveldb/db/write_batch.cc',
+                'leveldb/table/block.cc',
+                'leveldb/table/block_builder.cc',
+                'leveldb/table/filter_block.cc',
+                'leveldb/table/format.cc',
+                'leveldb/table/iterator.cc',
+                'leveldb/table/merger.cc',
+                'leveldb/table/table.cc',
+                'leveldb/table/table_builder.cc',
+                'leveldb/table/two_level_iterator.cc',
+                'leveldb/util/arena.cc',
+                'leveldb/util/bloom.cc',
+                'leveldb/util/cache.cc',
+                'leveldb/util/coding.cc',
+                'leveldb/util/comparator.cc',
+                'leveldb/util/crc32c.cc',
+                'leveldb/util/env.cc',
+                'leveldb/util/env_posix.cc',
+                'leveldb/util/filter_policy.cc',
+                'leveldb/util/hash.cc',
+                'leveldb/util/histogram.cc',
+                'leveldb/util/logging.cc',
+                'leveldb/util/options.cc',
+                'leveldb/util/status.cc',
+                'leveldb/port/port_posix.cc',
 
 				# python stuff
 				'leveldb_ext.cc',
