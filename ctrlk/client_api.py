@@ -13,7 +13,7 @@ class ApiException(Exception):
         return "API Exception: %s, %s" % (self.response.status_code, self.response.content)
 
 def convert(data):
-    if isinstance(data, basestring):
+    if isinstance(data, str):
         return data.encode('utf-8')
     elif isinstance(data, collections.Mapping):
         return dict(map(convert, data.iteritems()))

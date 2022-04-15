@@ -8,7 +8,7 @@ import leveldb, pointless, random, string, itertools, collections
 from twisted.internet import reactor, defer, threads
 
 def compare(a, b):
-	return cmp(a, b)
+	return a > b
 
 c = 'bytewise'
 c = ('leveldb.BytewiseComparator', compare)
@@ -26,14 +26,17 @@ kw = {
 }
 
 def random_value(n):
-	return bytearray(''.join(random.choice(string.ascii_letters) for i in xrange(n)))
+	letters = string.ascii_letters
+	choice = random.choice(letters)
+	strrang = ''.join(choice for i in range(n))
+	return bytearray(strrang, 'utf8')
 
 def generate_data():
 	random.seed(0)
 	k_ = []
 	v_ = []
 
-	for i in xrange(1000000):
+	for i in range(1000000):
 		k = random_value(8)
 		v = random_value(8)
 		k_.append(k)
@@ -51,7 +54,7 @@ def insert_alot(db, kv, ops, stop):
 		ops['n_insert'] += 1
 
 		if ops['n_insert'] > 0 and ops['n_insert'] % 1000 == 0:
-			print 'INFO: n_insert: %iK' % (ops['n_insert'] // 1000,)
+			print('INFO: n_insert: %iK' % (ops['n_insert'] // 1000,))
 
 @defer.inlineCallbacks
 def scan_alot(db, kv, ops, stop):
@@ -76,14 +79,14 @@ def scan_alot(db, kv, ops, stop):
 		ops['n_scans'] += 1
 
 		if ops['n_scans'] > 0 and ops['n_scans'] % 1000 == 0:
-			print 'INFO: n_scans: %iK' % (ops['n_scans'] // 1000,)
+			print('INFO: n_scans: %iK' % (ops['n_scans'] // 1000))
 
 def main():
-	#generate_data()
+	generate_data()
 
 	reactor.suggestThreadPoolSize(20)
 
-	kv = pointless.Pointless('/home/arni/py-leveldb/data.map', allow_print = False).GetRoot()
+	kv = pointless.Pointless('data.map', allow_print = False).GetRoot()
 	db = leveldb.LevelDB('./db', **kw)
 
 	stop = [False]
@@ -94,7 +97,7 @@ def main():
 
 	ops = collections.defaultdict(int)
 
-	for i in xrange(10):
+	for i in range(10):
 		reactor.callWhenRunning(insert_alot, db, kv, ops, stop)
 		reactor.callWhenRunning(scan_alot, db, kv, ops, stop)
 

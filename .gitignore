@@ -1,4 +1,7 @@
+.vscode/
 build/
 dist/
 ctrlk.egg-info/
+test/*.map
+test/db*/
 *.pyc

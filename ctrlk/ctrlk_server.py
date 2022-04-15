@@ -31,6 +31,23 @@ class MyRequestHandler(tornado.web.RequestHandler):
         project_root = self.get_argument("project_root")
         abs_project_root = os.path.abspath(project_root)
         return g_projects[abs_project_root]
+    def write_error(self, status_code, **kwargs):
+        if self.settings.get("serve_traceback") and "exc_info" in kwargs:
+            # in debug mode, try to send a traceback
+            self.set_header('Content-Type', 'text/plain')
+            for line in traceback.format_exception(*kwargs["exc_info"]):
+                self.write(line)
+            self.finish()
+        else:
+            self.set_status(status_code)
+            if kwargs['reason']:
+                self.finish(kwargs['reason'])
+            else:
+                self.finish("<html><title>%(code)d: %(message)s</title>"
+                    "<body>%(code)d: %(message)s</body></html>" % {
+                        "code": status_code,
+                        "message": self._reason,
+                    })
 
 class PingHandler(MyRequestHandler):
     def get(self):
@@ -149,4 +166,3 @@ if __name__ == "__main__":
     options = parser.parse_args()
 
     launch_server(options.port, options.suicide_seconds)
-

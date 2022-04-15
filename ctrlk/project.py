@@ -43,7 +43,7 @@ def PopulateScopeNames(cursor, scopeNames, scopeDepths, depth = 0):
                             scopeNames.append('')
                             scopeDepths.append(-1)
 
-                        if scopeDepths[i] < depth: 
+                        if scopeDepths[i] < depth:
                             scopeDepths[i] = depth
                             if scopeNames[i] != '': scopeNames[i] += '::'
                             scopeNames[i] += ch.spelling
@@ -63,7 +63,7 @@ def ParseCurrentFileThread(project):
 class Project(object):
     def __init__(self, library_path, project_root, n_workers=None):
         if n_workers is None:
-            n_workers = (multiprocessing.cpu_count() * 3) / 2
+            n_workers = int((multiprocessing.cpu_count() * 3) / 2)
 
         self.clang_library_path = library_path
 
@@ -134,7 +134,7 @@ class Project(object):
                     if '++' in command[0] or "cc" in command[0] or "clang" in command[0]:
                         file_name = os.path.abspath(entry['file'])
 
-                        # it could be startswith in the general case, but for my 
+                        # it could be startswith in the general case, but for my
                         # specific purposes I needed to check the middle of the string too -- AS
                         if "/usr/include" in file_name:
                             continue
@@ -154,7 +154,7 @@ class Project(object):
         else:
             try:
                 origin_file = self.leveldb_connection.Get("h%%%" + file_name)
-            except KeyError:        
+            except KeyError:
                 return None, None, None
             compile_command = self.compilation_db[origin_file]
 
@@ -208,7 +208,7 @@ class Project(object):
             self.current_file_tus.pop(file_name, None)
             self.current_file_expire.pop(file_name, None)
             self.current_file_scopes.pop(file_name, None)
-    
+
     def get_usr_under_cursor(self, file_name, line, col):
         with self.c_parse_lock:
             if file_name not in self.current_file_tus:

@@ -50,7 +50,7 @@ static struct PyModuleDef leveldb_extension_def = {
 
 #define INITERROR return NULL
 
-extern "C" PyObject* PyInit_leveldb(void)
+extern "C" PyObject* PyInit_indexer(void)
 
 #else
 
